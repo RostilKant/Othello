@@ -50,7 +50,12 @@
     <ImplicitlyExpandDesignTimeFacades>false</ImplicitlyExpandDesignTimeFacades>
   </PropertyGroup>
   <ItemGroup>
-     <Compile Include="Assets\ClickCellConf.cs" />
+     <Compile Include="Assets\Models\GameManager.cs" />
+     <Compile Include="Assets\Models\Chip.cs" />
+     <Compile Include="Assets\Models\Board.cs" />
+     <Compile Include="Assets\Models\Cell.cs" />
+     <Compile Include="Assets\Scripts\ClickCell.cs" />
+     <Compile Include="Assets\Views\CellsCreator.cs" />
  <Reference Include="Unity.Timeline.Editor">
  <HintPath>/home/rostil/Programming/Labs/GameDev/Othello/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
  </Reference>
@@ -660,11 +665,6 @@
  <Reference Include="mscorlib">
  <HintPath>/home/rostil/Documents/Unity/2020.1.8f1/Editor/Data/NetStandard/compat/2.0.0/shims/netfx/mscorlib.dll</HintPath>
  </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Assets\Controllers" />
-    <Folder Include="Assets\Models" />
-    <Folder Include="Assets\Views" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
