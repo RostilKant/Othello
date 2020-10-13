@@ -2,12 +2,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Serialization;
 
-public class ClickCellConf : MonoBehaviour
+public class ClickCell : MonoBehaviour
 {
-
-    public Transform tokenObj;
+    public Transform chipObj;
     // Start is called before the first frame update
     void Start()
     {
@@ -22,6 +20,6 @@ public class ClickCellConf : MonoBehaviour
 
     private void OnMouseDown()
     {
-        Instantiate(tokenObj, transform.position, tokenObj.rotation);
+        Instantiate(chipObj, transform.position, chipObj.rotation);
     }
 }
