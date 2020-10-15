@@ -1,4 +1,8 @@
 ﻿using System;
+using System.Drawing;
+using Controllers;
+using Models;
+using Views;
 
 namespace Othello
 {
@@ -6,7 +10,12 @@ namespace Othello
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            var game = new GameBoardWithEvents();
+            var output = new ConsoleOutput();
+            output.ListenTo(game);
+            
+            var input = new ConsoleInput();
+            input.ReadCommands(game);
         }
     }
 }

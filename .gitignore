@@ -1,2 +1,14 @@
 /.idea
 *.info
+*/*.AssemblyAttributes.cs
+*assets
+*.nuget*
+*.cache
+*/netcoreapp3.1/.NETCoreApp,Version=v3.1.AssemblyAttributes.cs
+*.AssemblyInfo.cs
+*.csproj.*
+*.deps.*
+*.txt
+*.pdb
+
+

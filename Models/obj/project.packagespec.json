@@ -1,10 +1,10 @@
 ﻿{
   "version": "1.0.0",
   "restore": {
-    "projectUniqueName": "/home/rostil/Programming/Labs/GameDev/Othello/Othello/Othello.csproj",
-    "projectName": "Othello",
-    "projectPath": "/home/rostil/Programming/Labs/GameDev/Othello/Othello/Othello.csproj",
-    "outputPath": "/home/rostil/Programming/Labs/GameDev/Othello/Othello/obj/",
+    "projectUniqueName": "/home/rostil/Programming/Labs/GameDev/Othello/Models/Models.csproj",
+    "projectName": "Models",
+    "projectPath": "/home/rostil/Programming/Labs/GameDev/Othello/Models/Models.csproj",
+    "outputPath": "/home/rostil/Programming/Labs/GameDev/Othello/Models/obj/",
     "projectStyle": "PackageReference",
     "originalTargetFrameworks": [
       "netcoreapp3.1"
@@ -14,14 +14,7 @@
     },
     "frameworks": {
       "netcoreapp3.1": {
-        "projectReferences": {
-          "/home/rostil/Programming/Labs/GameDev/Othello/Controllers/Controllers.csproj": {
-            "projectPath": "/home/rostil/Programming/Labs/GameDev/Othello/Controllers/Controllers.csproj"
-          },
-          "/home/rostil/Programming/Labs/GameDev/Othello/Views/Views.csproj": {
-            "projectPath": "/home/rostil/Programming/Labs/GameDev/Othello/Views/Views.csproj"
-          }
-        }
+        "projectReferences": {}
       }
     },
     "warningProperties": {

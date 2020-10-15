@@ -2,19 +2,6 @@
   "version": 3,
   "targets": {
     ".NETCoreApp,Version=v3.1": {
-      "Controllers/1.0.0": {
-        "type": "project",
-        "framework": ".NETCoreApp,Version=v3.1",
-        "dependencies": {
-          "Models": "1.0.0"
-        },
-        "compile": {
-          "bin/placeholder/Controllers.dll": {}
-        },
-        "runtime": {
-          "bin/placeholder/Controllers.dll": {}
-        }
-      },
       "Models/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v3.1",
@@ -24,43 +11,19 @@
         "runtime": {
           "bin/placeholder/Models.dll": {}
         }
-      },
-      "Views/1.0.0": {
-        "type": "project",
-        "framework": ".NETCoreApp,Version=v3.1",
-        "dependencies": {
-          "Models": "1.0.0"
-        },
-        "compile": {
-          "bin/placeholder/Views.dll": {}
-        },
-        "runtime": {
-          "bin/placeholder/Views.dll": {}
-        }
       }
     }
   },
   "libraries": {
-    "Controllers/1.0.0": {
-      "type": "project",
-      "path": "../Controllers/Controllers.csproj",
-      "msbuildProject": "../Controllers/Controllers.csproj"
-    },
     "Models/1.0.0": {
       "type": "project",
       "path": "../Models/Models.csproj",
       "msbuildProject": "../Models/Models.csproj"
-    },
-    "Views/1.0.0": {
-      "type": "project",
-      "path": "../Views/Views.csproj",
-      "msbuildProject": "../Views/Views.csproj"
     }
   },
   "projectFileDependencyGroups": {
     ".NETCoreApp,Version=v3.1": [
-      "Controllers >= 1.0.0",
-      "Views >= 1.0.0"
+      "Models >= 1.0.0"
     ]
   },
   "packageFolders": {
@@ -69,11 +32,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/rostil/Programming/Labs/GameDev/Othello/Othello/Othello.csproj",
-      "projectName": "Othello",
-      "projectPath": "/home/rostil/Programming/Labs/GameDev/Othello/Othello/Othello.csproj",
+      "projectUniqueName": "/home/rostil/Programming/Labs/GameDev/Othello/Controllers/Controllers.csproj",
+      "projectName": "Controllers",
+      "projectPath": "/home/rostil/Programming/Labs/GameDev/Othello/Controllers/Controllers.csproj",
       "packagesPath": "/home/rostil/.nuget/packages/",
-      "outputPath": "/home/rostil/Programming/Labs/GameDev/Othello/Othello/obj/",
+      "outputPath": "/home/rostil/Programming/Labs/GameDev/Othello/Controllers/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/home/rostil/.nuget/NuGet/NuGet.Config"
@@ -87,11 +50,8 @@
       "frameworks": {
         "netcoreapp3.1": {
           "projectReferences": {
-            "/home/rostil/Programming/Labs/GameDev/Othello/Controllers/Controllers.csproj": {
-              "projectPath": "/home/rostil/Programming/Labs/GameDev/Othello/Controllers/Controllers.csproj"
-            },
-            "/home/rostil/Programming/Labs/GameDev/Othello/Views/Views.csproj": {
-              "projectPath": "/home/rostil/Programming/Labs/GameDev/Othello/Views/Views.csproj"
+            "/home/rostil/Programming/Labs/GameDev/Othello/Models/Models.csproj": {
+              "projectPath": "/home/rostil/Programming/Labs/GameDev/Othello/Models/Models.csproj"
             }
           }
         }
