@@ -26,6 +26,8 @@ namespace Models
 
         public CellState GetCellValue(int x, int y) => field[x, y].State;
 
+        public List<(int, int)> GetAllAvailableCells { get; private set; }
+
         public GameBoard(Player firstPlayer, Player secondPlayer)
         {
             this.firstPlayer = firstPlayer;
@@ -65,13 +67,13 @@ namespace Models
         {
             field[coords.Item1, coords.Item2].State = player.State;
             UpdateField(player.State, coords);
-            GetAvailableCells(CurrentPlayer);
+            GetAllAvailableCells = GetAvailableCells(CurrentPlayer.State);
         }
 
         private void UpdateField(CellState color, (int, int) coords)
         {
             foreach(var direction in Directions) {
-                if (this.IsDirectionAvailable(color,coords.Item1, coords.Item2,
+                if (IsDirectionAvailable(color,coords.Item1, coords.Item2,
                     direction.Item1, direction.Item2)) {
                     var currentRow = coords.Item1;
                     var currentCol = coords.Item2;
@@ -95,18 +97,18 @@ namespace Models
                     } while (true);
                 }
             }
+            GetAllAvailableCells = GetAvailableCells(GetOppositeColor(CurrentPlayer.State));
         }
 
-        public List<(int, int)> GetAvailableCells(Player player){
+        public List<(int, int)> GetAvailableCells(CellState state){
             var availableCells = new List<(int, int)>();
             
             for (var i = 0; i < field.GetLength(0); i++) {
                 for (var j = 0; j < field.GetLength(1); j++)
-                {
-                    var cell = field[i, j];
-                    if (IsCellAvailable(player.State, i,j)) {
+                { 
+                    if (IsCellAvailable(GetOppositeColor(state), i,j)) {
                         availableCells.Add((i,j));
-                        Console.Write($"{i} {j} --");
+                        // Console.Write($"{i} {j} --");
                     }
                 }
             }
@@ -121,7 +123,7 @@ namespace Models
             }
 
             return Directions.Any(direction => 
-                IsDirectionAvailable(GetOppositeColor(state), row, column, direction.Item1, direction.Item2));
+                IsDirectionAvailable(state, row, column, direction.Item1, direction.Item2));
         }
 
         private bool IsDirectionAvailable(CellState state, int row, int column, int rowDirection, int colDirection)

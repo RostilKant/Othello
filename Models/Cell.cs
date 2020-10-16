@@ -6,7 +6,7 @@ namespace Models
         White,
         Empty
     }
-    
+
     public class Cell
     {
         public CellState State { get; set; }
