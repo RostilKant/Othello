@@ -10,7 +10,7 @@ namespace Othello
     {
         static void Main(string[] args)
         {
-            var game = new GameBoardWithEvents();
+            var game = new GameBoardWithEvents(new Player(CellState.Black), new Player(CellState.White));
             var output = new ConsoleOutput();
             output.ListenTo(game);
             

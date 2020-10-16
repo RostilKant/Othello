@@ -6,7 +6,9 @@ namespace Models
     {
         public event Action<Cell[,]> GameStarted;
 
-        public GameBoardWithEvents()
+        public event Action<Cell[,]> FieldUpdated;
+
+        public GameBoardWithEvents(Player firstPlayer, Player secondPlayer) : base(firstPlayer, secondPlayer)
         {
             
         }
@@ -15,6 +17,13 @@ namespace Models
         {
             base.PrepareField();
             GameStarted?.Invoke(Field);
+            FieldUpdated?.Invoke(Field);
+        }
+        
+        protected override void MarkCell((int, int) coords, Player player)
+        {
+            base.MarkCell(coords, player);
+            FieldUpdated?.Invoke(Field);
         }
     }
 }

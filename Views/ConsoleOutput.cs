@@ -11,9 +11,10 @@ namespace Views
         {
             _board = board;
             _board.GameStarted += OnGameStarted;
+            _board.FieldUpdated += OnFieldUpdated;
         }
 
-        private void OnGameStarted(Cell[,] field)
+        private void OnFieldUpdated(Cell[,] field)
         {
             Console.WriteLine("  0 1 2 3 4 5 6 7");
             for (var x = 0; x < field.GetLength(0); x++)
@@ -22,7 +23,7 @@ namespace Views
 
                 for (var y = 0; y < field.GetLength(1); y++)
                 {
-                    Console.Write($"|{V(field[x,y])}");
+                    Console.Write($"|{V(field[y,x])}");
                 }
                 Console.Write($"| {x}");
                 Console.WriteLine();
@@ -39,6 +40,11 @@ namespace Views
                     _ => "X"
                 };
             }
+        }
+
+        private void OnGameStarted(Cell[,] field)
+        {
+            Console.Out.WriteLine("Game is started! Make your first move with MOVE X Y");
         }
         
         

@@ -20,6 +20,11 @@ namespace Controllers
                     case "start":
                         game.StartGame();
                         break;
+                    case "move":
+                        var x = int.Parse(splitCommand[1]);
+                        var y = int.Parse(splitCommand[2]);
+                        game.MakeMove((x,y));
+                        break;
                     default:
                         Console.WriteLine("GG");
                         break;
