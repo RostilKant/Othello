@@ -11,8 +11,62 @@ namespace Views
         {
             _board = board;
             _board.GameStarted += OnGameStarted;
+            _board.GameFinished += OnGameFinish;
+            _board.GameRestarted += OnGameRestarted;
             _board.FieldUpdated += OnFieldUpdated;
+            _board.WrongCellInputed += OnWrongCellInputed;
+            _board.ScoresCalculated += OnScoresCalculated;
+            _board.GamePreparation += OnGamePreparation;
         }
+
+        private void OnGamePreparation()
+        {
+            Console.Out.Write("And his name iiiiis OTHELLO!!!Tuturutuuu tuturutuuu... Type");
+            Console.ForegroundColor = ConsoleColor.DarkCyan;
+            Console.Out.Write(" START");   
+            Console.ResetColor();
+            Console.Out.Write(" to play\n");
+            
+            Console.Out.Write("If you want play against computer input");
+            Console.ForegroundColor = ConsoleColor.DarkCyan;
+            Console.Out.Write(" START COMPUTER");
+            Console.ResetColor();
+            Console.Out.Write(" to play\n");
+
+        }
+
+        private void OnScoresCalculated(int firstPlayerScore,int secondPlayerScore )
+        {
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine($"BLACK: {firstPlayerScore}\n" +
+                              $"WHITE: {secondPlayerScore}");
+            Console.ResetColor();
+        }
+
+        private void OnWrongCellInputed()
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.Out.WriteLine("You inputed incorrect cell coord, please choose one with '+'");
+            Console.ResetColor();
+        }
+
+        private void OnGameRestarted()
+        {
+            Console.Out.Write("Game is restarted, field is cleared! Make your first move with");
+            Console.ForegroundColor = ConsoleColor.DarkCyan;
+            Console.Out.Write(" MOVE");
+            Console.ResetColor();
+            Console.Out.Write(" X Y\n");
+        }
+
+        private void OnGameFinish(int arg1, int arg2)
+        {
+            Console.Out.WriteLine($"Good game! The {_board.Winner} WIN!!!GRAZ!\n" +
+                                  $"If u want to play a new game input START");
+            
+        }
+        
+        
 
         private void OnFieldUpdated(Cell[,] field)
         {
@@ -57,7 +111,6 @@ namespace Views
                             if (availableCells.Contains((y, x)))
                             {
                                 Console.Write("|+");
-                                availableCells.Remove((y, x));
                             }
                             else
                             {
@@ -87,7 +140,11 @@ namespace Views
 
         private void OnGameStarted(Cell[,] field)
         {
-            Console.Out.WriteLine("Game is started! Make your first move with MOVE X Y");
+            Console.Out.Write("Game is started, field is cleared! Make your first move with");
+            Console.ForegroundColor = ConsoleColor.DarkCyan;
+            Console.Out.Write(" MOVE");
+            Console.ResetColor();
+            Console.Out.Write(" X Y\n");
         }
         
         

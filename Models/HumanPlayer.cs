@@ -1,13 +1,12 @@
 namespace Models
 {
-    public class Player
+    public class HumanPlayer: IPlayer
     {
         public CellState State { get; set; }
 
-        public Player(CellState state)
+        public HumanPlayer(CellState state)
         {
             State = state;
         }
-        
     }
 }

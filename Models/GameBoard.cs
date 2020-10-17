@@ -12,60 +12,111 @@ namespace Models
         private static readonly List<(int, int)> Directions = 
             new List<(int, int)> {(-1, -1), (0, -1), (1, -1), (-1, 0), (1, 0), (-1, 1), (0, 1), (1, 1)};
 
-        private readonly Player firstPlayer;
-        private readonly Player secondPlayer;
+        protected  IPlayer FirstPlayer { get; set; }
+        protected  IPlayer SecondPlayer { get; set; }
 
-        private Cell[,] field;
+        private Cell[,] _field;
         
-        public Player CurrentPlayer { get; set; }
-        public Player Winner { get; set; }
+        public IPlayer CurrentPlayer { get; set; }
+        public string Winner { get; set; }
         
-        public bool isEnded { get; private set; }
+        public Cell[,] Field => _field.Clone() as Cell[,];
 
-        public Cell[,] Field => field.Clone() as Cell[,];
-
-        public CellState GetCellValue(int x, int y) => field[x, y].State;
+        public CellState GetCellValue(int x, int y) => _field[x, y].State;
 
         public List<(int, int)> GetAllAvailableCells { get; private set; }
 
-        public GameBoard(Player firstPlayer, Player secondPlayer)
+        public GameBoard()
         {
-            this.firstPlayer = firstPlayer;
-            this.secondPlayer = secondPlayer;
+            
         }
 
-        public void StartGame()
+        public virtual void StartGame(string choosePlayer)
         {
-            CurrentPlayer = firstPlayer;
+            FirstPlayer = new HumanPlayer(CellState.Black);
+
+            if (choosePlayer.ToLower() == "computer")
+            {
+                SecondPlayer = new ComputerPlayer(CellState.White);
+            }
+            else
+            {
+                SecondPlayer = new HumanPlayer(CellState.White);
+            }
+
+            CurrentPlayer = FirstPlayer;
+            PrepareField();
+        }
+        
+        public virtual void RestartGame()
+        {
+            _field = new Cell[FieldSize,FieldSize];
+            CurrentPlayer = FirstPlayer;
             PrepareField();
         }
 
         protected virtual void PrepareField()
         {
-            field = new Cell[FieldSize,FieldSize];
-            for (var x = 0; x < field.GetLength(0); x++)
+            _field = new Cell[FieldSize,FieldSize];
+            for (var x = 0; x < _field.GetLength(0); x++)
             {
-                for (var y = 0; y < field.GetLength(1); y++)
+                for (var y = 0; y < _field.GetLength(1); y++)
                 {
-                    field[x, y] = new Cell(CellState.Empty);
+                    _field[x, y] = new Cell(CellState.Empty);
                 }
             }
             
-            field[3,3].State = CellState.White;
-            field[4,4].State = CellState.White;
-            field[3,4].State = CellState.Black;
-            field[4,3].State = CellState.Black;
+            _field[3,3].State = CellState.White;
+            _field[4,4].State = CellState.White;
+            _field[3,4].State = CellState.Black;
+            _field[4,3].State = CellState.Black;
         }
         
         public void MakeMove((int, int) coords)
         {
-            MarkCell(coords, CurrentPlayer);
-            SwitchPlayer();
+            GetAllAvailableCells ??= GetAvailableCells(GetOppositeColor(CurrentPlayer.State));
+
+            if (!GetAllAvailableCells.Contains(coords))
+            {
+                WrongCellInput();
+            }
+            else
+            {
+               
+                MarkCell(coords, CurrentPlayer);
+                
+                CalculatePlayersScore();
+                SwitchPlayer();
+            }
+
+            if (CurrentPlayer is ComputerPlayer)
+            {
+                var r = new Random();
+                MarkCell(GetAllAvailableCells[r.Next(0, GetAllAvailableCells.Count)], CurrentPlayer);
+                CalculatePlayersScore();
+                SwitchPlayer();
+            }
+
+            if (IsFull())
+            {
+                FinishGame();
+                return;
+            }
+
+            if (GetAllAvailableCells.Count == 0)
+                SwitchPlayer();
         }
 
-        protected virtual void MarkCell((int, int) coords, Player player)
+        protected virtual void WrongCellInput()
         {
-            field[coords.Item1, coords.Item2].State = player.State;
+            
+        }
+
+        protected virtual void MarkCell((int, int) coords, IPlayer player)
+        {
+            if (!IsLegalCoords(coords)) return;
+            
+            _field[coords.Item1, coords.Item2].State = player.State;
             UpdateField(player.State, coords);
             GetAllAvailableCells = GetAvailableCells(CurrentPlayer.State);
         }
@@ -83,16 +134,16 @@ namespace Models
                         currentRow += rowDirection;
                         currentCol += colDirection;
 
-                        if (currentRow < 0 || currentRow > field.GetLength(0) - 1 || 
-                            currentCol < 0 || currentCol > field.GetLength(0) - 1) {
+                        if (currentRow < 0 || currentRow > _field.GetLength(0) - 1 || 
+                            currentCol < 0 || currentCol > _field.GetLength(0) - 1) {
                             break;
                         }
 
-                        if (field[currentRow,currentCol].State == color) {
+                        if (_field[currentRow,currentCol].State == color) {
                             break;
                         }
 
-                        field[currentRow, currentCol].State = color;
+                        _field[currentRow, currentCol].State = color;
 
                     } while (true);
                 }
@@ -103,12 +154,12 @@ namespace Models
         public List<(int, int)> GetAvailableCells(CellState state){
             var availableCells = new List<(int, int)>();
             
-            for (var i = 0; i < field.GetLength(0); i++) {
-                for (var j = 0; j < field.GetLength(1); j++)
+            for (var i = 0; i < _field.GetLength(0); i++) {
+                for (var j = 0; j < _field.GetLength(1); j++)
                 { 
                     if (IsCellAvailable(GetOppositeColor(state), i,j)) {
                         availableCells.Add((i,j));
-                        // Console.Write($"{i} {j} --");
+                        //Console.Write($"{i} {j} --");
                     }
                 }
             }
@@ -117,7 +168,7 @@ namespace Models
 
         private bool IsCellAvailable(CellState state, int row, int column)
         {
-            if (field[row, column].State != CellState.Empty)
+            if (_field[row, column].State != CellState.Empty)
             {
                 return false;
             }
@@ -134,13 +185,13 @@ namespace Models
                 row += rowDirection;
                 column += colDirection;
                 
-                if (row < 0 || row > field.GetLength(0) - 1 || column < 0 || column > field.GetLength(0) - 1) {
+                if (row < 0 || row > _field.GetLength(0) - 1 || column < 0 || column > _field.GetLength(0) - 1) {
                     return false;
                 }
 
                 if (IsCellEmpty(row, column)) {
                     return false;
-                } else if (field[row,column].State == state) {
+                } else if (_field[row,column].State == state) {
                     return oppositeColorEncountered;
                 } else {
                     oppositeColorEncountered = true;
@@ -150,12 +201,12 @@ namespace Models
 
         private bool IsCellEmpty(int row, int column)
         {
-            return field[row, column].State == CellState.Empty;
+            return _field[row, column].State == CellState.Empty;
         }
         
         private void SwitchPlayer()
         {
-            CurrentPlayer = CurrentPlayer == firstPlayer ? secondPlayer : firstPlayer;
+            CurrentPlayer = CurrentPlayer == FirstPlayer ? SecondPlayer : FirstPlayer;
         }
         
         public static CellState GetOppositeColor(CellState color)
@@ -168,15 +219,53 @@ namespace Models
             };
         }
         
-        public bool IsEnded()
+        public bool IsFull()
         {
-            for (int i = 0; i < field.GetLength(0); i++)
+            for (int i = 0; i < _field.GetLength(0); i++)
             {
-                for (int j = 0; j < field.GetLength(1); j++)
+                for (int j = 0; j < _field.GetLength(1); j++)
                 {
-                    if (field[i,j].State == CellState.Empty)
+                    if (_field[i,j].State == CellState.Empty)
                         return false;
                 }
+            }
+            return true;
+        }
+
+        public virtual void CalculatePlayersScore()
+        { }
+
+        public int CountPlayerCells(CellState state)
+        {
+            var counter = 0;
+            for (int i = 0; i < FieldSize; i++)
+            {
+                for (int j = 0; j < FieldSize; j++)
+                {
+                    if (_field[i,j].State == state)
+                    {
+                        counter++;
+                    }
+                }
+            }
+
+            return counter;
+        }
+        
+        public virtual void FinishGame()
+        {
+            Winner = CountPlayerCells(FirstPlayer.State) > 
+                     CountPlayerCells(GetOppositeColor(SecondPlayer.State)) ? "BLACKS" : "WHITES";
+        }
+
+        private bool IsLegalCoords((int, int) coords)
+        {
+            if(coords.Item1 > 7 || coords.Item1 < 0 || coords.Item2 > 7 || coords.Item2 < 0)
+            {
+                Console.BackgroundColor = ConsoleColor.Red;
+                Console.WriteLine("PLEASE, input the correct coordinates");
+                Console.ResetColor();
+                return false;
             }
             return true;
         }

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Models;
 
 namespace Controllers
@@ -8,28 +9,55 @@ namespace Controllers
         public void ReadCommands(GameBoardWithEvents game)
         {
             string command = null;
-            Console.Out.WriteLine("And his name iiiiis OTHELLO!!!Tuturutuuu tuturutuuu... Type START to play ");
+            Console.Out.Write("And his name iiiiis OTHELLO!!!Tuturutuuu tuturutuuu... Type");
+            Console.ForegroundColor = ConsoleColor.DarkCyan;
+            Console.Out.Write(" START");   
+            Console.ResetColor();
+            Console.Out.Write(" to play\n");
 
             while (true)
             {
                 command = Console.ReadLine();
-                var splitCommand = command?.Split(new char[0]);
+                List<string> splitCommand = new List<string>(command?.Split(new char[0])!);
+
+                for (int i = 3; i >= splitCommand.Count; i--)
+                {
+                    splitCommand.Add("");
+                }
+                
 
                 switch (splitCommand?[0].ToLower())
                 {
                     case "start":
-                        game.StartGame();
+                        game.StartGame(splitCommand[1].ToLower());
+                        game.CalculatePlayersScore();
                         break;
                     case "move":
-                        var x = int.Parse(splitCommand[1]);
-                        var y = int.Parse(splitCommand[2]);
+                        int.TryParse(splitCommand[1], out var x);
+                        int.TryParse(splitCommand[2], out var y);
                         game.MakeMove((x,y));
                         break;
+                    case "restart":
+                        game.RestartGame();
+                        game.CalculatePlayersScore();
+                        break;
+                    case "finish":
+                        game.FinishGame();
+                        break;
+                    case "exit":
+                        break;
                     default:
-                        Console.WriteLine("GG");
+                        Console.WriteLine("Unknown command");
                         break;
                 }
             }
+        }
+
+        private void printError()
+        {
+            Console.BackgroundColor = ConsoleColor.Red;
+            Console.WriteLine("PLEASE, input the correct coordinates");
+            Console.ResetColor();
         }
     }
 }
