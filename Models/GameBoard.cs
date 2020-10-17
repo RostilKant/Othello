@@ -25,11 +25,7 @@ namespace Models
         public CellState GetCellValue(int x, int y) => _field[x, y].State;
 
         public List<(int, int)> GetAllAvailableCells { get; private set; }
-
-        public GameBoard()
-        {
-            
-        }
+        
 
         public virtual void StartGame(string choosePlayer)
         {

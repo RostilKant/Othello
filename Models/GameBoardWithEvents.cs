@@ -15,12 +15,12 @@ namespace Models
 
         public event Action<int, int> ScoresCalculated;
 
-        public event Action GamePreparation;
+       // public event Action GamePreparation;
 
         public event Action GameRestarted;
         public GameBoardWithEvents()
         {
-            GamePreparation?.Invoke();
+           // GamePreparation?.Invoke();
         }
 
         public override void StartGame(string choosePlayer)

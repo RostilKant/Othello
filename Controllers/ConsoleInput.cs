@@ -9,11 +9,6 @@ namespace Controllers
         public void ReadCommands(GameBoardWithEvents game)
         {
             string command = null;
-            Console.Out.Write("And his name iiiiis OTHELLO!!!Tuturutuuu tuturutuuu... Type");
-            Console.ForegroundColor = ConsoleColor.DarkCyan;
-            Console.Out.Write(" START");   
-            Console.ResetColor();
-            Console.Out.Write(" to play\n");
 
             while (true)
             {

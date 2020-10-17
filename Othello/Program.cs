@@ -10,8 +10,6 @@ namespace Othello
     {
         static void Main(string[] args)
         {
-            IPlayer firstPlayer;
-            IPlayer secondPlayer;
             var game = new GameBoardWithEvents();
             var output = new ConsoleOutput();
             output.ListenTo(game);

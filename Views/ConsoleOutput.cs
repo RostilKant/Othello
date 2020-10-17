@@ -7,6 +7,10 @@ namespace Views
     {
         private GameBoardWithEvents _board;
 
+        public ConsoleOutput()
+        {
+            GamePreparation();
+        }
         public void ListenTo(GameBoardWithEvents board)
         {
             _board = board;
@@ -16,10 +20,10 @@ namespace Views
             _board.FieldUpdated += OnFieldUpdated;
             _board.WrongCellInputed += OnWrongCellInputed;
             _board.ScoresCalculated += OnScoresCalculated;
-            _board.GamePreparation += OnGamePreparation;
+            // _board.GamePreparation += OnGamePreparation;
         }
 
-        private void OnGamePreparation()
+        private void GamePreparation()
         {
             Console.Out.Write("And his name iiiiis OTHELLO!!!Tuturutuuu tuturutuuu... Type");
             Console.ForegroundColor = ConsoleColor.DarkCyan;

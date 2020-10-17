@@ -10,5 +10,6 @@
 *.deps.*
 *.txt
 *.pdb
-
+*/obj
+*/bin
 
