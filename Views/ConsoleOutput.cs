@@ -31,11 +31,10 @@ namespace Views
             Console.ResetColor();
             Console.Out.Write(" to play\n");
             
-            Console.Out.Write("If you want play against computer input");
+            Console.Out.Write("If you want play against computer type");
             Console.ForegroundColor = ConsoleColor.DarkCyan;
-            Console.Out.Write(" START COMPUTER");
+            Console.Out.Write(" START COMPUTER\n");
             Console.ResetColor();
-            Console.Out.Write(" to play\n");
 
         }
 
