@@ -4,7 +4,8 @@ namespace Models
     {
         Black,
         White,
-        Empty
+        Empty,
+        BlackHole
     }
 
     public class Cell
