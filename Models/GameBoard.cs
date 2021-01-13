@@ -84,6 +84,11 @@ namespace Models
                 CalculatePlayersScore();
                 SwitchPlayer();
             }
+            
+            if (ChangeMove())
+            {
+                return;
+            }
 
             if (CurrentPlayer is ComputerPlayer)
             {
@@ -101,6 +106,17 @@ namespace Models
 
             if (GetAllAvailableCells.Count == 0)
                 SwitchPlayer();
+            
+            bool ChangeMove()
+            {
+                if (GetAllAvailableCells.Count == 0)
+                {
+                    SwitchPlayer();
+                    return true;
+                }
+
+                return false;
+            }
         }
 
         protected virtual void WrongCellInput()
@@ -250,8 +266,8 @@ namespace Models
         
         public virtual void FinishGame()
         {
-            Winner = CountPlayerCells(FirstPlayer.State) > 
-                     CountPlayerCells(GetOppositeColor(SecondPlayer.State)) ? "BLACKS" : "WHITES";
+            Winner = CountPlayerCells(FirstPlayer.State) < 
+                     CountPlayerCells(GetOppositeColor(SecondPlayer.State)) ?  "WHITES" : "BLACKS";
         }
 
         private bool IsLegalCoords((int, int) coords)
