@@ -16,12 +16,12 @@ namespace Controllers
 
         public void StartGame()
         {
-            string command = null;
-
+            IPlayer first = null;
+            IPlayer second = null;
             while (true)
             {
-                command = Console.ReadLine();
-                List<string> splitCommand = new List<string>(command?.Split(new char[0])!);
+                var command = Console.ReadLine();
+                var splitCommand = new List<string>(command?.Split(new char[0])!);
 
                 for (int i = 3; i >= splitCommand.Count; i--)
                 {
@@ -32,12 +32,24 @@ namespace Controllers
                 switch (splitCommand?[0].ToLower())
                 {
                     case "start":
+                        switch (splitCommand?[1].ToLower())
+                        {
+                            case "computer":
+                                first = new HumanPlayer(_game);
+                                second = new HumanPlayer(_game);
+                                break;
+                            case "ai":
+                                first = new HumanPlayer(_game);
+                                second = new HumanPlayer(_game);
+                                break;
+                            case "computerVSai":
+                                first = new HumanPlayer(_game);
+                                second = new HumanPlayer(_game);
+                                break;
+                        }
                         _game.StartGame();
                         break;
                     case "move":
-                        int.TryParse(splitCommand[1], out var x);
-                        int.TryParse(splitCommand[2], out var y);
-                        _game.MakeMove(new Tuple<int, int>(x,y));
                         break;
                     case "restart":
                         _game.RestartGame();
@@ -47,8 +59,11 @@ namespace Controllers
                     case "exit":
                         break;
                     default:
-                        Console.WriteLine("Unknown command");
-                        break;
+                        while (true)
+                        {
+                            first?.MakeMove();
+                            second?.MakeMove();
+                        }
                 }
             }
         }

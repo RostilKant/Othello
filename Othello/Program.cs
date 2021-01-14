@@ -14,8 +14,9 @@ namespace Othello
             var output = new ConsoleOutput();
             output.ListenTo(game);
             
-            var input = new ConsoleInput();
-            input.ReadCommands(game);
+            var input = new ConsoleInput(game);
+            
+            input.StartGame();
         }
     }
 }
