@@ -136,7 +136,8 @@ namespace Views
                     CellState.Empty => " ",
                     CellState.Black => "B",
                     CellState.White => "W",
-                    _ => "X"
+                    CellState.BlackHole => "X",
+                    _ => "?"
                 };
             }
         }

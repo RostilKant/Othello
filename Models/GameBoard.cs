@@ -7,6 +7,8 @@ namespace Models
 {
     public class GameBoard
     {
+        Random _r = new Random();
+
         private const int FieldSize = 8;
         
         private static readonly List<(int, int)> Directions = 
@@ -62,45 +64,73 @@ namespace Models
                 }
             }
             
+            CreateBlackHole();
+            
             _field[3,3].State = CellState.White;
             _field[4,4].State = CellState.White;
             _field[3,4].State = CellState.Black;
             _field[4,3].State = CellState.Black;
+
+            void CreateBlackHole()
+            {
+                int x, y = 0;
+                do
+                {
+                    x = _r.Next(0, 7);
+                    y = _r.Next(0, 7);
+                } while (x == 3 || x == 4 || y == 3 || y == 4);
+                
+                _field[x, y].State = CellState.BlackHole;
+            }
         }
         
         public void MakeMove((int, int) coords)
         {
             GetAllAvailableCells ??= GetAvailableCells(GetOppositeColor(CurrentPlayer.State));
-
-            if (!GetAllAvailableCells.Contains(coords))
+            
+            /*if (!GetAllAvailableCells.Contains(coords))
             {
                 WrongCellInput();
-            }
-            else
+                return;
+            }*/
+
+            if (CurrentPlayer is HumanPlayer)
             {
-               
                 MarkCell(coords, CurrentPlayer);
-                
+                //MarkCell(GetAllAvailableCells[_r.Next(0, GetAllAvailableCells.Count)], CurrentPlayer);
+
                 CalculatePlayersScore();
                 SwitchPlayer();
             }
 
-            if (CurrentPlayer is ComputerPlayer)
+            if (ChangeMove())
             {
-                var r = new Random();
-                MarkCell(GetAllAvailableCells[r.Next(0, GetAllAvailableCells.Count)], CurrentPlayer);
-                CalculatePlayersScore();
-                SwitchPlayer();
-            }
-
-            if (IsFull())
-            {
-                FinishGame();
                 return;
             }
-
-            if (GetAllAvailableCells.Count == 0)
+            
+            if (CurrentPlayer is ComputerPlayer)
+            {
+                MarkCell(GetAllAvailableCells[_r.Next(0, GetAllAvailableCells.Count)], CurrentPlayer);
+                CalculatePlayersScore();
                 SwitchPlayer();
+            }
+            
+            if (GetAvailableCells(GetOppositeColor(CurrentPlayer.State)).Count == 0 && 
+                GetAvailableCells(CurrentPlayer.State).Count == 0)
+            {
+                FinishGame();
+            }
+
+            bool ChangeMove()
+            {
+                if (GetAllAvailableCells.Count == 0)
+                {
+                    SwitchPlayer();
+                    return true;
+                }
+
+                return false;
+            }
         }
 
         protected virtual void WrongCellInput()
@@ -135,7 +165,8 @@ namespace Models
                             break;
                         }
 
-                        if (_field[currentRow,currentCol].State == color) {
+                        if (_field[currentRow,currentCol].State == color || 
+                            _field[currentRow,currentCol].State == CellState.BlackHole) {
                             break;
                         }
 
@@ -169,6 +200,11 @@ namespace Models
                 return false;
             }
 
+            if (_field[row, column].State == CellState.BlackHole)
+            {
+                return false;
+            }
+
             return Directions.Any(direction => 
                 IsDirectionAvailable(state, row, column, direction.Item1, direction.Item2));
         }
@@ -189,7 +225,11 @@ namespace Models
                     return false;
                 } else if (_field[row,column].State == state) {
                     return oppositeColorEncountered;
-                } else {
+                } else if (_field[row,column].State == CellState.BlackHole)
+                {
+                    return false;
+                }
+                else {
                     oppositeColorEncountered = true;
                 }
             } while (true);
@@ -211,6 +251,7 @@ namespace Models
             {
                 CellState.Black => CellState.White,
                 CellState.White => CellState.Black,
+                CellState.BlackHole => CellState.BlackHole,
                 _ => CellState.Empty
             };
         }
@@ -250,8 +291,8 @@ namespace Models
         
         public virtual void FinishGame()
         {
-            Winner = CountPlayerCells(FirstPlayer.State) > 
-                     CountPlayerCells(GetOppositeColor(SecondPlayer.State)) ? "BLACKS" : "WHITES";
+            Winner = CountPlayerCells(FirstPlayer.State) < 
+                     CountPlayerCells(GetOppositeColor(SecondPlayer.State)) ? "WHITES" : "BLACK";
         }
 
         private bool IsLegalCoords((int, int) coords)

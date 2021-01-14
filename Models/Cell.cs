@@ -4,7 +4,8 @@ namespace Models
     {
         Black,
         White,
-        Empty
+        Empty,
+        BlackHole
     }
 
     public class Cell
@@ -15,5 +16,6 @@ namespace Models
         {
             State = state;
         }
+        
     }
 }
