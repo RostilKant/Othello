@@ -46,8 +46,9 @@ namespace Models
             return cellsCopy;
         }
 
-
-        private static CellState GetOppositeColor(CellState color) => 
+        
+        
+        public static CellState GetOppositeColor(CellState color) => 
             color switch
             {
                 CellState.Black => CellState.White,
@@ -144,9 +145,9 @@ namespace Models
                     cells[row][column].State == playerColor && cellsInLine > 0);
         }
 
-        private static bool IsLegalCoords(int rowIndex, int columnIndex, List<List<Cell>> cells)
+        private static bool IsLegalCoords(int row, int column, List<List<Cell>> cells)
         {
-            return (rowIndex >= 0 && columnIndex >= 0 && rowIndex < cells.Count && columnIndex < cells.Count);
+            return (row >= 0 && column >= 0 && row < cells.Count && column < cells.Count);
         }
     }
 }

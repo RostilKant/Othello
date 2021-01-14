@@ -4,7 +4,7 @@ using Models;
 
 namespace Controllers.Players
 {
-    public class HumanPlayer
+    public class HumanPlayer : IPlayer
     {
         private readonly GameBoardWithEvents _gameBoard;
 

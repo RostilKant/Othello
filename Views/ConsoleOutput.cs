@@ -42,18 +42,6 @@ namespace Views
             Console.ResetColor();
             Console.Out.Write(" X Y\n");
         }
-
-        public void OnGameFinish(int firstPlayerScore, int secondPlayerScore)
-        {
-            Console.WriteLine($"-----------------Game over --------------------");
-            if (firstPlayerScore > secondPlayerScore)
-                Console.WriteLine("SECOND PLAYER WON");
-            else if (secondPlayerScore > firstPlayerScore)
-                Console.WriteLine("FIRST PLAYER WON");
-            else
-                Console.WriteLine("TIE");
-        }
-        
         
 
         private void OnFieldUpdated(List<List<Cell>> field)

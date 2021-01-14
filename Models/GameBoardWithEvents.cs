@@ -7,6 +7,7 @@ namespace Models
     {
         private readonly CellState _firstPlayerColor = CellState.Black;
         private readonly CellState _secondPlayerColor = CellState.White;
+        
         public CellState CurrentPlayerColor;
 
         private Board _board;
@@ -23,6 +24,7 @@ namespace Models
         public event Action<int, int> ScoresCalculated;
 
         public event Action GameRestarted;
+        
 
         public event Action MovePassed;
         public GameBoardWithEvents()
@@ -34,12 +36,7 @@ namespace Models
         {
             return _board.Cells;
         }
-
-        public void UndoMove(List<List<Cell>> cellsBeforeMove)
-        {
-            _board = new Board(cellsBeforeMove);
-            SwitchPlayer();
-        }
+        
 
         public List<Tuple<int, int>> GetAvailableCells()
         {
@@ -49,7 +46,7 @@ namespace Models
 
         public bool IsGameFinished()
         {
-            return Game.IsFull(_board.Cells)||PassedMovesCount >= 2;
+            return IsFull(_board.Cells)||PassedMovesCount >= 2;
         }
 
         public bool IsFirstPlayerWon()
@@ -83,18 +80,18 @@ namespace Models
             }
             _board = new Board(cells);
         }
-        public void RestartGame(Tuple<int, int> blackHoleCoords)
+        public void RestartGame()
         {
             _board = new Board();
-            _board.SetBlackHole(blackHoleCoords);
+            _board.SetBlackHole(GenerateBlackHoleCoords());
             GameRestarted?.Invoke();
         }
 
-        public void StartGame(Tuple<int, int> blackHoleCoords)
+        public void StartGame()
         {
             CurrentPlayerColor = _firstPlayerColor;
 
-            _board.SetBlackHole(blackHoleCoords);
+            _board.SetBlackHole(GenerateBlackHoleCoords());
 
             GameStarted?.Invoke(_board.Cells);
 
@@ -102,11 +99,11 @@ namespace Models
             AvailableCellsCalculated?.Invoke(availableCells);
         }
 
-        public void StartGame(Tuple<int, int> blackHoleCoords, Tuple<int, int> firstMove)
+        public void StartGame(Tuple<int, int> firstMove)
         {
             CurrentPlayerColor = _firstPlayerColor;
 
-            _board.SetBlackHole(blackHoleCoords);
+            _board.SetBlackHole(GenerateBlackHoleCoords());
 
             GameStarted?.Invoke(_board.Cells);
 
@@ -142,6 +139,20 @@ namespace Models
         public void SwitchPlayer()
         {
             CurrentPlayerColor = CurrentPlayerColor == _firstPlayerColor ? _secondPlayerColor : _firstPlayerColor;
+        }
+
+        public Tuple<int,int> GenerateBlackHoleCoords()
+        {
+            var r = new Random();
+            int x;
+            int y;
+            do
+            {
+                x = r.Next(0, 7);
+                y = r.Next(0, 7);
+            } while (x == 3 || x == 4 || y == 3 || y == 4);
+
+            return new Tuple<int, int>(x,y);
         }
     }
 }
