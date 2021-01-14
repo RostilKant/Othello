@@ -16,6 +16,12 @@ namespace Models
         {
             State = state;
         }
-        
+        public void ChangeColor()
+        {
+            if (State == CellState.Black)
+                State = CellState.White;
+            else if (State == CellState.White)
+                State = CellState.Black;
+        }
     }
 }
