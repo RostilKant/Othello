@@ -1,12 +1,20 @@
 using System;
 using System.Collections.Generic;
+using Controllers.Players;
 using Models;
 
 namespace Controllers
 {
     public class ConsoleInput
     {
-        public void ReadCommands(GameBoardWithEvents game)
+        private readonly GameBoardWithEvents _game;
+
+        public ConsoleInput(GameBoardWithEvents gameBoardWithEvents)
+        {
+            _game= gameBoardWithEvents;
+        }
+
+        public void StartGame()
         {
             string command = null;
 
@@ -24,20 +32,17 @@ namespace Controllers
                 switch (splitCommand?[0].ToLower())
                 {
                     case "start":
-                        game.StartGame(splitCommand[1].ToLower());
-                        game.CalculatePlayersScore();
+                        _game.StartGame();
                         break;
                     case "move":
                         int.TryParse(splitCommand[1], out var x);
                         int.TryParse(splitCommand[2], out var y);
-                        game.MakeMove((x,y));
+                        _game.MakeMove(new Tuple<int, int>(x,y));
                         break;
                     case "restart":
-                        game.RestartGame();
-                        game.CalculatePlayersScore();
+                        _game.RestartGame();
                         break;
                     case "finish":
-                        game.FinishGame();
                         break;
                     case "exit":
                         break;
@@ -47,12 +52,26 @@ namespace Controllers
                 }
             }
         }
+        
+        /*public void StartGame()
+        {
+            var firstPlayer = new HumanPlayer(_game);
+            var secondPlayer = new HumanPlayer(_game);
+            
+            //game loop
+            while (true)
+            {
+                firstPlayer.MakeMove();
+                secondPlayer.MakeMove();
+            }
+        }*/
 
-        private void printError()
+
+        /*private void printError()
         {
             Console.BackgroundColor = ConsoleColor.Red;
             Console.WriteLine("PLEASE, input the correct coordinates");
             Console.ResetColor();
-        }
+        }*/
     }
 }
