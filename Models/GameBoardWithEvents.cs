@@ -60,8 +60,11 @@ namespace Models
         {
             if (GetAvailableCells().Count == 0)
             {
-                //Console.WriteLine(" -------------- GameManager.MakeMove() PASS");
                 Pass();
+                if (IsGameFinished())
+                {
+                    FinishGame(GetCells());
+                }
             }
             else
             {
@@ -80,6 +83,7 @@ namespace Models
             }
             _board = new Board(cells);
         }
+        
         public void RestartGame()
         {
             _board = new Board();
@@ -126,14 +130,14 @@ namespace Models
         
         public void Pass()
         {
-            PassedMovesCount += 1;
+            PassedMovesCount++;
             SwitchPlayer();
             MovePassed?.Invoke();
         }
 
         public void PassWithoutMassage()
         {
-            PassedMovesCount += 1;
+            PassedMovesCount++;
             SwitchPlayer();
         }
         public void SwitchPlayer()

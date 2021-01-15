@@ -172,7 +172,7 @@ namespace Views
 
         public void ShowScores(int firstPlayerScore, int secondPlayerScore)
         {
-            Console.WriteLine($"WHITES: {firstPlayerScore}\nBLACKS: {secondPlayerScore}");
+            Console.WriteLine($" BLACKS: {firstPlayerScore}\n WHITES: {secondPlayerScore}");
         }
 
         public void SetCells(List<List<Cell>> cells)

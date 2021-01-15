@@ -13,7 +13,7 @@ namespace Controllers.Players
             _gameBoard = gameBoard;
         }
         
-        public Tuple<int, int> MakeMove()
+        public void MakeMove()
         {
             var availableCells = _gameBoard.GetAvailableCells();
             var moveCoords = new Tuple<int, int>(-1, -1);
@@ -51,8 +51,6 @@ namespace Controllers.Players
                 }
             }
             while (true);
-
-            return moveCoords;
         }
         
         public static bool IsLegalMove(int x, int y)
