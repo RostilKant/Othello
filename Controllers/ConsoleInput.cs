@@ -45,14 +45,23 @@ namespace Controllers
                                 break;
                             case "ai":
                                 _first = new HumanPlayer(_game);
-                                _second = new HumanPlayer(_game);
+                                _second = new AIPlayer(_game);
                                 break;
                             case "computerVSai":
-                                _first = new HumanPlayer(_game);
-                                _second = new HumanPlayer(_game);
+                                _first = new ComputerPlayer(_game);
+                                _second = new AIPlayer(_game);
                                 break;
                         }
                         _game.StartGame();
+                        while (true)
+                        {
+                            if (_game.PassedMovesCount > 2)
+                            {
+                                break;
+                            }
+                            _first?.MakeMove();
+                            _second?.MakeMove();
+                        }
                         break;
                     case "move":
                         break;
@@ -64,11 +73,7 @@ namespace Controllers
                     case "exit":
                         break;
                     default:
-                        while (true)
-                        {
-                            _first?.MakeMove();
-                            _second?.MakeMove();
-                        }
+                        break;
                 }
             }
         }

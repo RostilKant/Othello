@@ -37,7 +37,11 @@ namespace Models
             return _board.Cells;
         }
         
-
+        public void UndoMove(List<List<Cell>> cellsBeforeMove)
+        {
+            _board = new Board(cellsBeforeMove);
+            SwitchPlayer();
+        }
         public List<Tuple<int, int>> GetAvailableCells()
         {
             var availableCells = Game.GetAvailableCells(CurrentPlayerColor, _board.Cells);

@@ -17,15 +17,14 @@ namespace Controllers.Players
         {
             var availableCells = _gameBoard.GetAvailableCells();
             var moveCoords = new Tuple<int, int>(-1, -1);
-
-            //read from console white input isn`t correct
+            
             do
             {
                 var move = Console.ReadLine();
                 var moveCommands = move?.Split(' ');
-               
-                int.TryParse(moveCommands?[1], out var x);
-                int.TryParse(moveCommands?[2], out var y);
+
+                int x = Convert.ToInt32(moveCommands?[1]);
+                int y = Convert.ToInt32(moveCommands?[2]);
                 
                 if (move != null)
                 {
@@ -34,7 +33,7 @@ namespace Controllers.Players
                     {
                         if (move?[0].ToString() == "pass")
                         {
-                            _gameBoard.PassWithoutMassage();
+                            _gameBoard.Pass();
                             break;
                         }
 
@@ -55,7 +54,7 @@ namespace Controllers.Players
         
         public static bool IsLegalMove(int x, int y)
         {
-            return x <= 8 && y <= 8 && x >= 1 && y >= 1;
+            return x <= 7 && y <= 7 && x >= 0 && y >= 0;
         }
     }
 }

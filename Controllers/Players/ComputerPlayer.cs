@@ -22,13 +22,7 @@ namespace Controllers.Players
                 _gameBoard.PassWithoutMassage();
                 return;
             }
-
-
-            if (_gameBoard.IsGameFinished())
-            {
-                return;
-            }
-
+            
             var randomMove = availableCells[_random.Next(availableCells.Count)];
             _gameBoard.MakeMove(randomMove);
         }
