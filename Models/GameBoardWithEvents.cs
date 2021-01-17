@@ -26,7 +26,8 @@ namespace Models
         public event Action GameRestarted;
         
 
-        public event Action MovePassed;
+        public event Action ChangingTurn;
+        
         public GameBoardWithEvents()
         {
             _board = new Board();
@@ -37,7 +38,11 @@ namespace Models
             return _board.Cells;
         }
         
-
+        public void UndoMove(List<List<Cell>> cellsBeforeMove)
+        {
+            _board = new Board(cellsBeforeMove);
+            SwitchPlayer();
+        }
         public List<Tuple<int, int>> GetAvailableCells()
         {
             var availableCells = Game.GetAvailableCells(CurrentPlayerColor, _board.Cells);
@@ -48,19 +53,11 @@ namespace Models
         {
             return IsFull(_board.Cells)||PassedMovesCount >= 2;
         }
-
-        public bool IsFirstPlayerWon()
-        {
-            var firstPlayerCellsCount = Game.CalculatePlayersScore(_firstPlayerColor, _board.Cells);
-            var secondPlayerCellsCount = Game.CalculatePlayersScore(_secondPlayerColor, _board.Cells);
-            return firstPlayerCellsCount < secondPlayerCellsCount;
-        }
-
         public void MakeMove(Tuple<int, int> coords)
         {
             if (GetAvailableCells().Count == 0)
             {
-                Pass();
+                ChangedTurn();
                 if (IsGameFinished())
                 {
                     FinishGame(GetCells());
@@ -116,36 +113,30 @@ namespace Models
             MakeMove(firstMove);
         }
 
-        public void CalculatePlayersScore(List<List<Cell>> cells)
+        private void CalculatePlayersScore(List<List<Cell>> cells)
         {
             ScoresCalculated?.Invoke(Game.CalculatePlayersScore(_firstPlayerColor, cells), Game.CalculatePlayersScore(_secondPlayerColor, cells));
         }
 
-        public void FinishGame(List<List<Cell>> cells)
+        private void FinishGame(List<List<Cell>> cells)
         {
             var firstPlayerCellsCount = Game.CalculatePlayersScore(_firstPlayerColor, cells);
             var secondPlayerCellsCount = Game.CalculatePlayersScore(_secondPlayerColor, cells);
             GameFinished?.Invoke(firstPlayerCellsCount, secondPlayerCellsCount);
         }
-        
-        public void Pass()
+        public void ChangedTurn()
         {
             PassedMovesCount++;
             SwitchPlayer();
-            MovePassed?.Invoke();
+            //MovePassed?.Invoke();
         }
 
-        public void PassWithoutMassage()
-        {
-            PassedMovesCount++;
-            SwitchPlayer();
-        }
-        public void SwitchPlayer()
+        private void SwitchPlayer()
         {
             CurrentPlayerColor = CurrentPlayerColor == _firstPlayerColor ? _secondPlayerColor : _firstPlayerColor;
         }
 
-        public Tuple<int,int> GenerateBlackHoleCoords()
+        private Tuple<int,int> GenerateBlackHoleCoords()
         {
             var r = new Random();
             int x;

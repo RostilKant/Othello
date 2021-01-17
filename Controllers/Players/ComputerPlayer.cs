@@ -6,7 +6,7 @@ namespace Controllers.Players
     public class ComputerPlayer : IPlayer
     {
         private readonly GameBoardWithEvents _gameBoard;
-        readonly Random _random = new Random();
+        private readonly Random _random = new Random();
 
 
         public ComputerPlayer(GameBoardWithEvents gameBoard)
@@ -19,18 +19,10 @@ namespace Controllers.Players
             
             if (availableCells.Count == 0)
             {
-                _gameBoard.PassWithoutMassage();
+                _gameBoard.ChangedTurn();
                 return;
             }
-
-
-            if (_gameBoard.IsGameFinished())
-            {
-                return;
-            }
-
-            var randomMove = availableCells[_random.Next(availableCells.Count)];
-            _gameBoard.MakeMove(randomMove);
+            _gameBoard.MakeMove(availableCells[_random.Next(availableCells.Count)]);
         }
     }
 }
